@@ -185,19 +185,20 @@ const HomeScreen = () => {
         <Text style={styles.title}>Controle Financeiro</Text>
         <Text style={styles.balance}>Saldo do {new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} {currentYear}</Text>
         <Text style={styles.balanceAmount}>R$ {balance.toFixed(2)}</Text>
+        <View style={{alignItems: 'center'}}>
         <TouchableOpacity
-          style={[styles.addButton, { backgroundColor: '#28a745' }]} // Verde para receitas
+          style={[styles.addButton, { backgroundColor: '#28a745', width: 150 }]} // Verde para receitas
           onPress={() => { setIsIncome(true); setModalVisible(true); }}
         >
           <Text style={styles.addButtonText}>Adicionar Receita</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.addButton, { backgroundColor: '#dc3545' }]} // Vermelho para despesas
+          style={[styles.addButton, { backgroundColor: '#dc3545', width: 150 }]} // Vermelho para despesas
           onPress={() => { setIsIncome(false); setModalVisible(true); }}
         >
           <Text style={styles.addButtonText}>Adicionar Despesa</Text>
         </TouchableOpacity>
-
+        </View>
         <View style={styles.monthNavigation}>
           <TouchableOpacity style={styles.navigationButton} onPress={handlePreviousMonth}>
             <Text style={styles.navigationButtonText}>Mês Anterior</Text>
