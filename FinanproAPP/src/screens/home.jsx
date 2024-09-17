@@ -8,19 +8,22 @@ import { useFocusEffect } from '@react-navigation/native';
 const screenWidth = Dimensions.get('window').width;
 
 const HomeScreen = () => {
-  const [balance, setBalance] = useState(0);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [editModalVisible, setEditModalVisible] = useState(false);
-  const [isIncome, setIsIncome] = useState(true);
-  const [name, setName] = useState('');
-  const [amount, setAmount] = useState('');
-  const [selectedTransaction, setSelectedTransaction] = useState(null);
-  const [transactions, setTransactions] = useState([]);
-  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
-  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  const [monthlyBalances, setMonthlyBalances] = useState(Array(12).fill(0));
-  const [chartModalVisible, setChartModalVisible] = useState(false);
-  const [showIncomeList, setShowIncomeList] = useState(true);
+  // State variables
+  const [balance, setBalance] = useState(0); // Saldo atual
+  const [modalVisible, setModalVisible] = useState(false); // Visibilidade do modal de adicionar
+  const [editModalVisible, setEditModalVisible] = useState(false); // Visibilidade do modal de edição
+  const [isIncome, setIsIncome] = useState(true); // Tipo de transação (receita ou despesa)
+  const [name, setName] = useState(''); // Nome da transação
+  const [amount, setAmount] = useState(''); // Valor da transação
+  const [selectedTransaction, setSelectedTransaction] = useState(null); // Transação selecionada para edição
+  const [transactions, setTransactions] = useState([]); // Lista de transações
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth()); // Mês atual
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear()); // Ano atual
+  const [monthlyBalances, setMonthlyBalances] = useState(Array(12).fill(0)); // Saldo mensal
+  const [chartModalVisible, setChartModalVisible] = useState(false); // Visibilidade do modal de gráfico
+  const [showIncomeList, setShowIncomeList] = useState(true); // Flag para mostrar lista de receitas ou despesas
+
+  // Atualiza os dados quando a tela recebe foco ou o mês/ano muda
   useFocusEffect(
     React.useCallback(() => {
       loadData();
@@ -28,6 +31,7 @@ const HomeScreen = () => {
     }, [currentMonth, currentYear])
   );
 
+  // Carrega os dados das transações e saldo do mês atual
   const loadData = async () => {
     try {
       const data = await AsyncStorage.getItem(`@transactions_${currentYear}_${currentMonth}`);
@@ -44,6 +48,7 @@ const HomeScreen = () => {
     }
   };
 
+  // Carrega os saldos mensais para o ano atual
   const loadMonthlyBalances = async () => {
     try {
       const balances = [];
@@ -62,6 +67,7 @@ const HomeScreen = () => {
     }
   };
 
+  // Salva os dados das transações e saldo no AsyncStorage
   const saveData = async (newTransactions, newBalance) => {
     try {
       const data = {
@@ -75,6 +81,7 @@ const HomeScreen = () => {
     }
   };
 
+  // Adiciona uma nova transação
   const handleAdd = () => {
     const value = parseFloat(amount);
     if (!isNaN(value)) {
@@ -95,6 +102,7 @@ const HomeScreen = () => {
     setAmount('');
   };
 
+  // Edita uma transação existente
   const handleEdit = () => {
     const value = parseFloat(amount);
     if (!isNaN(value) && selectedTransaction) {
@@ -116,6 +124,7 @@ const HomeScreen = () => {
     }
   };
 
+  // Exclui uma transação com confirmação
   const handleDelete = (transaction) => {
     Alert.alert(
       'Excluir Transação',
@@ -144,9 +153,11 @@ const HomeScreen = () => {
     );
   };
 
+  // Filtra transações por tipo (receita ou despesa)
   const incomeTransactions = transactions.filter(transaction => transaction.type === 'Receita');
   const expenseTransactions = transactions.filter(transaction => transaction.type === 'Despesa');
 
+  // Navega para o mês anterior
   const handlePreviousMonth = () => {
     setCurrentMonth((prevMonth) => {
       if (prevMonth === 0) {
@@ -157,6 +168,7 @@ const HomeScreen = () => {
     });
   };
 
+  // Navega para o próximo mês
   const handleNextMonth = () => {
     setCurrentMonth((prevMonth) => {
       if (prevMonth === 11) {
@@ -167,6 +179,7 @@ const HomeScreen = () => {
     });
   };
 
+  // Renderiza um item de transação
   const renderTransactionItem = ({ item }) => (
     <View style={styles.transactionItem}>
       <Text style={styles.transactionText}>{item.name} - R$ {item.amount.toFixed(2)}</Text>
@@ -181,24 +194,27 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
+      {/* Cabeçalho com título e saldo */}
       <View style={styles.header}>
         <Text style={styles.title}>Controle Financeiro</Text>
         <Text style={styles.balance}>Saldo do {new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} {currentYear}</Text>
         <Text style={styles.balanceAmount}>R$ {balance.toFixed(2)}</Text>
         <View style={{alignItems: 'center'}}>
-        <TouchableOpacity
-          style={[styles.addButton, { backgroundColor: '#28a745', width: 150 }]} // Verde para receitas
-          onPress={() => { setIsIncome(true); setModalVisible(true); }}
-        >
-          <Text style={styles.addButtonText}>Adicionar Receita</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.addButton, { backgroundColor: '#dc3545', width: 150 }]} // Vermelho para despesas
-          onPress={() => { setIsIncome(false); setModalVisible(true); }}
-        >
-          <Text style={styles.addButtonText}>Adicionar Despesa</Text>
-        </TouchableOpacity>
+          {/* Botões para adicionar receita e despesa */}
+          <TouchableOpacity
+            style={[styles.addButton, { backgroundColor: '#28a745', width: 150 }]} // Verde para receitas
+            onPress={() => { setIsIncome(true); setModalVisible(true); }}
+          >
+            <Text style={styles.addButtonText}>Adicionar Receita</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.addButton, { backgroundColor: '#dc3545', width: 150 }]} // Vermelho para despesas
+            onPress={() => { setIsIncome(false); setModalVisible(true); }}
+          >
+            <Text style={styles.addButtonText}>Adicionar Despesa</Text>
+          </TouchableOpacity>
         </View>
+        {/* Navegação entre meses */}
         <View style={styles.monthNavigation}>
           <TouchableOpacity style={styles.navigationButton} onPress={handlePreviousMonth}>
             <Text style={styles.navigationButtonText}>Mês Anterior</Text>
@@ -208,25 +224,30 @@ const HomeScreen = () => {
             <Text style={styles.navigationButtonText}>Próximo Mês</Text>
           </TouchableOpacity>
         </View>
+        {/* Botão para exibir gráfico */}
         <TouchableOpacity style={styles.chartButton} onPress={() => setChartModalVisible(true)}>
           <Text style={styles.chartButtonText}>Ver Gráfico</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.listButton} onPress={() => setShowIncomeList(true)}>
-          <Text style={styles.listButtonText}>Ver Receitas</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.listButton} onPress={() => setShowIncomeList(false)}>
-          <Text style={styles.listButtonText}>Ver Despesas</Text>
-        </TouchableOpacity>
       </View>
-
+      
+      {/* Lista de transações */}
+      <FlatList
+        data={showIncomeList ? incomeTransactions : expenseTransactions}
+        renderItem={renderTransactionItem}
+        keyExtractor={item => item.id.toString()}
+        style={styles.transactionList}
+        ListEmptyComponent={<Text style={styles.emptyListText}>Nenhuma transação encontrada.</Text>}
+      />
+      
+      {/* Modal para adicionar transação */}
       <Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalViewEditar}>
-          <Text style={styles.modalText}>{isIncome ? 'Adicionar Receita' : 'Adicionar Despesa'}</Text>
+        <View style={styles.modalView}>
+          <Text style={styles.modalTitle}>{isIncome ? 'Adicionar Receita' : 'Adicionar Despesa'}</Text>
           <TextInput
             style={styles.input}
             placeholder="Nome"
@@ -236,27 +257,34 @@ const HomeScreen = () => {
           <TextInput
             style={styles.input}
             placeholder="Valor"
+            keyboardType="numeric"
             value={amount}
             onChangeText={setAmount}
-            keyboardType="numeric"
           />
-          <TouchableOpacity style={styles.button} onPress={handleAdd}>
-            <Text style={styles.buttonText}>Salvar</Text>
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={handleAdd}
+          >
+            <Text style={styles.submitButtonText}>Adicionar</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => setModalVisible(false)}>
-            <Text style={styles.buttonText}>Cancelar</Text>
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={() => setModalVisible(false)}
+          >
+            <Text style={styles.cancelButtonText}>Cancelar</Text>
           </TouchableOpacity>
         </View>
       </Modal>
-
+      
+      {/* Modal para editar transação */}
       <Modal
         animationType="slide"
         transparent={true}
         visible={editModalVisible}
         onRequestClose={() => setEditModalVisible(false)}
       >
-        <View style={styles.modalViewEditar}>
-          <Text style={styles.modalText}>Editar Transação</Text>
+        <View style={styles.modalView}>
+          <Text style={styles.modalTitle}>Editar Transação</Text>
           <TextInput
             style={styles.input}
             placeholder="Nome"
@@ -266,98 +294,99 @@ const HomeScreen = () => {
           <TextInput
             style={styles.input}
             placeholder="Valor"
+            keyboardType="numeric"
             value={amount}
             onChangeText={setAmount}
-            keyboardType="numeric"
           />
-          <TouchableOpacity style={styles.button} onPress={handleEdit}>
-            <Text style={styles.buttonText}>Salvar</Text>
+          <TouchableOpacity
+            style={styles.submitButton}
+            onPress={handleEdit}
+          >
+            <Text style={styles.submitButtonText}>Salvar</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => setEditModalVisible(false)}>
-            <Text style={styles.buttonText}>Cancelar</Text>
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={() => setEditModalVisible(false)}
+          >
+            <Text style={styles.cancelButtonText}>Cancelar</Text>
           </TouchableOpacity>
         </View>
       </Modal>
 
+      {/* Modal para exibir gráfico */}
       <Modal
-      animationType="slide"
-      transparent={true}
-      visible={chartModalVisible}
-      onRequestClose={() => setChartModalVisible(false)}
-    >
-      <View style={styles.modalOverlay}>
+        animationType="slide"
+        transparent={true}
+        visible={chartModalVisible}
+        onRequestClose={() => setChartModalVisible(false)}
+      >
         <View style={styles.modalView}>
-          <Text style={styles.modalTitle}>Gráfico Mensal de {currentYear}</Text>
+          <Text style={styles.modalTitle}>Gráfico de Saldos Mensais</Text>
           <LineChart
             data={{
-              labels: Array.from({ length: 12 }, (_, i) => `${new Date(currentYear, i).toLocaleString('default', { month: 'short' })}`),
+              labels: [...Array(12).keys()].map(i => new Date(0, i).toLocaleString('default', { month: 'short' })),
               datasets: [
                 {
                   data: monthlyBalances,
-                },
-              ],
+                }
+              ]
             }}
-            width={screenWidth * 0.9}
+            width={screenWidth - 40} // Ajusta a largura do gráfico
             height={220}
             yAxisLabel="R$ "
             chartConfig={{
-              backgroundColor: '#fff',
-              backgroundGradientFrom: '#fff',
-              backgroundGradientTo: '#fff',
-              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              backgroundColor: '#ffffff',
+              backgroundGradientFrom: '#ffffff',
+              backgroundGradientTo: '#f0f0f0',
+              decimalPlaces: 2,
+              color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-              strokeWidth: 2,
+              style: {
+                borderRadius: 16
+              }
             }}
             bezier
             style={styles.chart}
           />
-          <TouchableOpacity style={styles.button} onPress={() => setChartModalVisible(false)}>
-            <Text style={styles.buttonText}>Fechar</Text>
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => setChartModalVisible(false)}
+          >
+            <Text style={styles.closeButtonText}>Fechar</Text>
           </TouchableOpacity>
         </View>
-      </View>
-    </Modal>
-
-      <FlatList
-        data={showIncomeList ? incomeTransactions : expenseTransactions}
-        renderItem={renderTransactionItem}
-        keyExtractor={(item) => item.id.toString()}
-        style={styles.transactionList}
-      />
-      <View style={styles.footerSpacing} />
+      </Modal>
     </View>
   );
 };
 
+// Estilos do componente
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    backgroundColor: '#f5f5f5',
-    paddingBottom: 50, // Adiciona espaço na parte inferior
+    padding: 20,
   },
   header: {
-    marginBottom: 10,
+    marginBottom: 20,
+    alignItems: 'center',
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 5,
   },
   balance: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 2,
+    fontSize: 18,
+    marginVertical: 10,
   },
   balanceAmount: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 10,
+    color: '#333',
   },
   addButton: {
-    padding: 8,
-    borderRadius: 4,
-    marginBottom: 5,
+    padding: 10,
+    borderRadius: 5,
+    marginVertical: 5,
     alignItems: 'center',
   },
   addButtonText: {
@@ -366,151 +395,126 @@ const styles = StyleSheet.create({
   },
   monthNavigation: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 5,
+    alignItems: 'center',
+    marginVertical: 10,
   },
   navigationButton: {
-    padding: 8,
-    backgroundColor: '#007bff',
-    borderRadius: 4,
+    flex: 1,
+    alignItems: 'center',
   },
   navigationButtonText: {
-    color: '#fff',
-    fontSize: 14,
+    color: '#007bff',
   },
   monthText: {
-    fontSize: 16,
-    alignSelf: 'center',
+    flex: 2,
+    textAlign: 'center',
+    fontSize: 18,
   },
   chartButton: {
-    backgroundColor: '#17a2b8',
-    padding: 8,
-    borderRadius: 4,
-    marginVertical: 5,
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#007bff',
     alignItems: 'center',
+    marginVertical: 10,
   },
   chartButtonText: {
     color: '#fff',
     fontSize: 16,
   },
-  listButton: {
-    backgroundColor: '#007bff',
-    padding: 8,
-    borderRadius: 4,
-    marginVertical: 3,
-    alignItems: 'center',
-  },
-  listButtonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Overlay background color
-  },
-  modalView: {
-    width: screenWidth * 0.9,
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 20,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 10,
-    elevation: 5,
-  },
-  modalViewEditar: {
-    width: screenWidth * 0.9,
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    top: '30%',
-    left: '5%',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 6 },  // Aumenta a altura da sombra
-    shadowOpacity: 0.5,  // Aumenta a opacidade da sombra
-    shadowRadius: 15,  // Aumenta o raio da sombra
-    elevation: 10,  // Aumenta a elevação para dispositivos Android
-  },
-  
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  chart: {
-    marginVertical: 8,
-    borderRadius: 16,
-  },
-  button: {
+  transactionList: {
     marginTop: 20,
-    backgroundColor: '#007bff',
-    padding: 10,
-    borderRadius: 8,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  input: {
-    height: 40,
-    width: 280,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 4,
-    paddingHorizontal: 8,
-    marginBottom: 8,
-    color: '#000000',
-  },
-  button: {
-    backgroundColor: '#007bff',
-    padding: 8,
-    borderRadius: 4,
-    marginBottom: 8,
-    alignItems: 'center',
-    width: 280,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
   },
   transactionItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
   },
   transactionText: {
-    fontSize: 14,
+    fontSize: 16,
   },
   editButton: {
     backgroundColor: '#ffc107',
     padding: 5,
-    borderRadius: 4,
+    borderRadius: 5,
     marginRight: 5,
   },
   deleteButton: {
     backgroundColor: '#dc3545',
     padding: 5,
-    borderRadius: 4,
+    borderRadius: 5,
   },
-  transactionList: {
+  buttonText: {
+    color: '#fff',
+  },
+  modalView: {
     flex: 1,
-    marginBottom: 50, // Ajuste o valor conforme necessário
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 20,
   },
-  footerSpacing: {
-    height: 50,
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 15,
+    color: '#fff',
   },
-  
+  input: {
+    width: '100%',
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#fff',
+    marginVertical: 5,
+  },
+  submitButton: {
+    backgroundColor: '#28a745',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginVertical: 5,
+    width: '100%',
+  },
+  submitButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  cancelButton: {
+    backgroundColor: '#dc3545',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginVertical: 5,
+    width: '100%',
+  },
+  cancelButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  closeButton: {
+    backgroundColor: '#007bff',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginVertical: 5,
+    width: '100%',
+  },
+  closeButtonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  chart: {
+    marginVertical: 8,
+    borderRadius: 16,
+  },
+  emptyListText: {
+    textAlign: 'center',
+    color: '#999',
+    fontSize: 16,
+    marginTop: 20,
+  },
 });
 
 export default HomeScreen;
