@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Button, Modal, TextInput, TouchableOpacity, Fla
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LineChart } from 'react-native-chart-kit';
 import { Dimensions } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -20,14 +21,12 @@ const HomeScreen = () => {
   const [monthlyBalances, setMonthlyBalances] = useState(Array(12).fill(0));
   const [chartModalVisible, setChartModalVisible] = useState(false);
   const [showIncomeList, setShowIncomeList] = useState(true);
-
-  useEffect(() => {
-    loadData();
-  }, [currentMonth, currentYear]);
-
-  useEffect(() => {
-    loadMonthlyBalances();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      loadData();
+      loadMonthlyBalances();
+    }, [currentMonth, currentYear])
+  );
 
   const loadData = async () => {
     try {
