@@ -4,15 +4,15 @@ import styles from '../styles/styles'; // Importa os estilos globais, incluindo 
 
 // Componente funcional ReceitaCard
 const ReceitaCard = (props) => {
+  console.log(props); // Verifica as props recebidas
   return (
-    // O componente 'CardBase' é reutilizado para criar um cartão de receita específico
-    // As props passadas para 'ReceitaCard' são propagadas para 'CardBase' com o spread operator ({...props})
     <CardBase
       {...props}
-      cardStyle={styles.receitaCard} // Aplica o estilo específico do cartão de receita
-      valueStyle={styles.receitaValue} // Aplica o estilo específico para o valor da receita
+      cardStyle={styles.receitaCard}
+      valueStyle={styles.receitaValue}
     />
   );
 };
+
 
 export default ReceitaCard; // Exporta o componente para ser usado em outros lugares

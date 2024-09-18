@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'; // Importa as bibliotecas React e Hooks
-import { View, Animated, Easing } from 'react-native'; // Importa componentes e utilitários do React Native
+import { View, Animated, Easing,Text } from 'react-native'; // Importa componentes e utilitários do React Native
 import Icon from 'react-native-vector-icons/Ionicons'; // Importa a biblioteca de ícones Ionicons
 
 // Componente funcional AnimatedIcon

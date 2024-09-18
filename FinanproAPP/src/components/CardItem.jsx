@@ -1,9 +1,9 @@
 import React from 'react'; // Importa a biblioteca React para criar componentes funcionais
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'; // Importa os componentes básicos do React Native
+import { View, Text, TouchableOpacity, StyleSheet} from 'react-native'; // Importa os componentes básicos do React Native
 import { AntDesign } from '@expo/vector-icons'; // Importa ícones da biblioteca AntDesign
 
-// Componente funcional SimpleCard
-const SimpleCard = ({ title, value, type, onEdit, onDelete }) => {
+// Componente funcional CardItem
+const CardItem = ({ title, value, type, onEdit, onDelete }) => {
   return (
     <View style={styles.card}>
       <View style={styles.content}>
@@ -25,7 +25,7 @@ const SimpleCard = ({ title, value, type, onEdit, onDelete }) => {
   );
 };
 
-// Estilos específicos para o SimpleCard
+// Estilos específicos para o CardItem
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row', // Layout horizontal para o cartão
@@ -72,4 +72,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SimpleCard; // Exporta o componente para ser usado em outros lugares
+export default CardItem; // Exporta o componente para ser usado em outros lugares

@@ -1,5 +1,5 @@
 import * as React from 'react'; // Importa a biblioteca React
-import { View, StyleSheet } from 'react-native'; // Importa componentes e utilitários do React Native
+import { View, StyleSheet, Text } from 'react-native'; // Importa componentes e utilitários do React Native
 import { FAB } from 'react-native-paper'; // Importa o componente Floating Action Button da biblioteca react-native-paper
 import styles from '../styles/styles'; // Importa estilos personalizados
 

@@ -4,13 +4,12 @@ import styles from '../styles/styles'; // Importa os estilos globais, incluindo 
 
 // Componente funcional DespesaCard
 const DespesaCard = (props) => {
+  console.log(props);  // Verifique os valores passados
   return (
-    // O componente 'CardBase' é reutilizado para criar um cartão de despesa específico
-    // As props passadas para 'DespesaCard' são propagadas para 'CardBase' com o spread operator ({...props})
     <CardBase
       {...props}
-      cardStyle={styles.despesaCard} // Aplica o estilo específico do cartão de despesa
-      valueStyle={styles.despesaValue} // Aplica o estilo específico para o valor da despesa
+      cardStyle={styles.despesaCard}
+      valueStyle={styles.despesaValue}
     />
   );
 };

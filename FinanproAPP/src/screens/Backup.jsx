@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Button, Alert, Platform } from 'react-native'; // Importa componentes para exibir a tela e botões
+import { View, Button, Alert, Platform, Text} from 'react-native'; // Importa componentes para exibir a tela e botões
 import * as FileSystem from 'expo-file-system'; // Biblioteca para manipular arquivos no sistema de arquivos
 import * as Sharing from 'expo-sharing'; // Biblioteca para compartilhar arquivos
 import * as XLSX from 'xlsx'; // Biblioteca para criar e manipular arquivos Excel

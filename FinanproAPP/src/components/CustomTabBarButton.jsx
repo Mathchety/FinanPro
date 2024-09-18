@@ -1,5 +1,5 @@
 import React from 'react'; // Importa a biblioteca React para criar componentes funcionais
-import { View, StyleSheet } from 'react-native'; // Importa os componentes básicos do React Native
+import { View, StyleSheet, Text} from 'react-native'; // Importa os componentes básicos do React Native
 import AddOpcao from '../screens/AddOpcao'; // Importa o componente de tela 'AddOpcao' para ser usado como botão flutuante
 
 // Componente funcional CustomTabBarButton

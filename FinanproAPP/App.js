@@ -23,7 +23,7 @@ const App = () => {
   return (
     <NavigationContainer> {/* Container que encapsula toda a navegação */}
       <Stack.Navigator
-        screenOptions={{ headerShown: false }} // Remove os cabeçalhos automáticos das telas
+        screenOptions={{ headerShown: false }} 
       >
         {/* Define a tela inicial como "Main", que carrega o Tab Navigator */}
         <Stack.Screen name="Main" component={MainTabNavigator} />

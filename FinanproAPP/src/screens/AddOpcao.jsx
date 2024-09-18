@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Modal } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Modal} from "react-native";
 import { AntDesign } from "@expo/vector-icons"; // Ícone para o botão flutuante
 import { useNavigation } from "@react-navigation/native"; // Hook para navegação entre telas
 
